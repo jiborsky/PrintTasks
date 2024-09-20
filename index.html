@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Checklist App</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .category-list {
+            margin-bottom: 30px;
+        }
+        .category-list label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .btn-primary {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        .task-checkbox {
+            margin-right: 10px;
+        }
+        #checklist h2 {
+            margin-top: 20px;
+        }
+        @media print {
+            .btn-primary {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-center mb-4">Category Checklist</h1>
+
+    <div class="category-list">
+        <h4>Select Categories</h4>
+        <div class="form-check">
+            <input class="form-check-input category" type="checkbox" value="Category 1" id="cat1">
+            <label class="form-check-label" for="cat1">Category 1</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input category" type="checkbox" value="Category 2" id="cat2">
+            <label class="form-check-label" for="cat2">Category 2</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input category" type="checkbox" value="Category 3" id="cat3">
+            <label class="form-check-label" for="cat3">Category 3</label>
+        </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="generateChecklist()">Print Tasks</button>
+
+    <div id="checklist" style="display:none;">
+        <h2 class="text-center">Selected Tasks</h2>
+        <div id="tasks"></div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS (optional) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Define checklist items for each category
+    const checklistItems = {
+        "Category 1": [
+            "Task 1.1",
+            "Task 1.2",
+            "Task 1.3"
+        ],
+        "Category 2": [
+            "Task 2.1",
+            "Task 2.2",
+            "Task 2.3"
+        ],
+        "Category 3": [
+            "Task 3.1",
+            "Task 3.2",
+            "Task 3.3",
+            "Task 3.4"
+        ]
+    };
+
+    function generateChecklist() {
+        const selectedCategories = document.querySelectorAll('.category:checked');
+        const tasksDiv = document.getElementById('tasks');
+        tasksDiv.innerHTML = ''; // Clear previous tasks
+
+        selectedCategories.forEach(category => {
+            const categoryTitle = category.value;
+            const taskList = checklistItems[categoryTitle];
+
+            if (taskList) {
+                const categoryHeader = document.createElement('h3');
+                categoryHeader.textContent = categoryTitle;
+                tasksDiv.appendChild(categoryHeader);
+
+                const ul = document.createElement('ul');
+                ul.classList.add('list-group', 'mb-3'); // Bootstrap list styling
+                taskList.forEach(task => {
+                    const li = document.createElement('li');
+                    li.classList.add('list-group-item', 'd-flex', 'align-items-center');
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.classList.add('task-checkbox', 'form-check-input');
+                    li.appendChild(checkbox);
+
+                    const taskLabel = document.createElement('span');
+                    taskLabel.textContent = task;
+                    li.appendChild(taskLabel);
+
+                    ul.appendChild(li);
+                });
+                tasksDiv.appendChild(ul);
+            }
+        });
+
+        // Show checklist div and trigger print
+        document.getElementById('checklist').style.display = 'block';
+        window.print();
+    }
+</script>
+
+</body>
+</html>
